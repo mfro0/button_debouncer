@@ -18,26 +18,26 @@ entity led_steer is
 end entity led_steer;
 
 architecture rtl of led_steer is
-    signal wait_for_release : boolean := false;
-    signal led_pos          : natural range 0 to NUM_LEDS - 1 := 0;
+    signal wait_for_btn_release : boolean := false;
+    signal led_pos              : natural range 0 to NUM_LEDS - 1 := 0;
 begin
     p_steer : process
     begin
         wait until rising_edge(clk);
-        if not wait_for_release then
+        if not wait_for_btn_release then
             if left_button then
                 if led_pos /= NUM_LEDS - 1 then
                     led_pos <= led_pos + 1;
                 end if;
-                wait_for_release <= true;
+                wait_for_btn_release <= true;
             elsif right_button then
                 if led_pos /= 0 then
                     led_pos <= led_pos - 1;
                 end if;
-                wait_for_release <= true;
+                wait_for_btn_release <= true;
             end if;
         elsif not left_button and not right_button then
-            wait_for_release <= false;
+            wait_for_btn_release <= false;
         end if;
     end process p_steer;
     led <= not std_ulogic_vector(to_unsigned(1, NUM_LEDS) sll led_pos);
