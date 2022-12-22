@@ -5,13 +5,12 @@ use ieee.std_logic_1164.all;
 --
 -- debounce a button
 --
--- The generic REQ_TICKS_STABLE is supposed to configure the number of clock ticks of <clk>
--- are required for the button signal to remain stable until its supposed to be valid.
---
+
 entity button_debouncer is
     generic
     (
-        REQ_TICKS_STABLE    : natural := 30000
+        REQ_TICKS_STABLE    : natural := 30000  -- Number of clock ticks the signal must be constant to consider it stable.
+                                                -- The number provided here is suitable for a 50 MHz clock.
     );
     port
     (
