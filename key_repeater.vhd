@@ -9,8 +9,8 @@ entity key_repeater is
         COMPARE_WIDTH       : natural := 16;
         --
         -- bit lengths for counters are solely dependent on the bit lentgh of these generics, i.e.
-        -- when you define these as 64 bit constants, the complete counters and comparisions
-        -- use the width defined here.
+        -- when you define these as 64 bit constants, all counters and comparisions
+        -- will use the width defined here.
         --
         -- The values defined here are suitable for a 50 MHz clock. Adapt accordingly.
         --
