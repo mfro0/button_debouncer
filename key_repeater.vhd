@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity key_repeater is
     generic
     (
-        -- reduce comparision width to this much (upper) bits of the counters to reduce resource consumption
+        -- limit comparision width to this much (upper) bits of the counters to reduce resource consumption
         COMPARE_WIDTH       : natural := 16;
         --
         -- bit lengths for counters are solely dependent on the bit lentgh of these generics, i.e.
