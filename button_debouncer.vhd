@@ -2,6 +2,12 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 
+--
+-- debounce a button
+--
+-- The generic REQ_TICKS_STABLE is supposed to configure the number of clock ticks of <clk>
+-- are required for the button signal to remain stable until its supposed to be valid.
+--
 entity button_debouncer is
     generic
     (
@@ -10,13 +16,15 @@ entity button_debouncer is
     port
     (
         clk                 : in std_ulogic;
+        
         button_in           : in std_ulogic;
         button_out          : out std_ulogic
     );
 end entity button_debouncer;
 
 architecture rtl of button_debouncer is
-    signal counter      : natural range 0 to REQ_TICKS_STABLE - 1 := 0;
+    subtype counter_type is natural range 0 to REQ_TICKS_STABLE - 1;
+    signal counter      : counter_type;
     signal btn_history  : std_ulogic_vector(2 downto 0) := (others => '0');
 begin
     p_debounce : process(all)
@@ -30,7 +38,7 @@ begin
                 counter <= counter + 1;
             end if;
             
-            if counter = counter'right - 1 then -- finished counting
+            if counter = counter_type'right - 1 then -- finished counting
                 button_out <= btn_history(btn_history'left);    -- output leftmost value
             end if;
         end if;
