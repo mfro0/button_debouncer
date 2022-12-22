@@ -9,8 +9,9 @@ use ieee.std_logic_1164.all;
 entity button_debouncer is
     generic
     (
-        REQ_TICKS_STABLE    : natural := 30000  -- Number of clock ticks the signal must be constant to consider it stable.
+        REQ_TICKS_STABLE    : natural := 30000; -- Number of clock ticks the signal must be constant to consider it stable.
                                                 -- The number provided here is suitable for a 50 MHz clock.
+        SYNCHRONIZER_WIDTH  : natural := 2      -- Number of synchronizer bits
     );
     port
     (
@@ -24,7 +25,7 @@ end entity button_debouncer;
 architecture rtl of button_debouncer is
     subtype counter_type is natural range 0 to REQ_TICKS_STABLE - 1;
     signal counter      : counter_type;
-    signal btn_history  : std_ulogic_vector(2 downto 0) := (others => '0');
+    signal btn_history  : std_ulogic_vector(SYNCHRONIZER_WIDTH downto 0) := (others => '0');
 begin
     p_debounce : process(all)
     begin
@@ -37,7 +38,7 @@ begin
                 counter <= counter + 1;
             end if;
             
-            if counter = counter_type'right - 1 then -- finished counting
+            if counter = counter_type'right - 1 then            -- finished counting
                 button_out <= btn_history(btn_history'left);    -- output leftmost value
             end if;
         end if;
