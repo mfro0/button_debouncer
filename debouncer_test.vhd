@@ -13,10 +13,13 @@ entity debouncer_test is
 end entity debouncer_test;
 
 architecture rtl of debouncer_test is
-    signal btn          : std_ulogic_vector(1 downto 0);
+    signal btn                      : std_ulogic_vector(1 downto 0);
     
-    alias left_button   : std_ulogic is btn(1);
-    alias right_button  : std_ulogic is btn(0);
+    alias left_button               : std_ulogic is btn(1);
+    alias right_button              : std_ulogic is btn(0);
+    
+    signal left_button_repeated,
+           right_button_repeated    : std_ulogic;
 begin
     i_debouncer1 : entity work.button_debouncer
         port map
@@ -34,6 +37,22 @@ begin
             button_out  => left_button
         );
 
+    i_repeater1 : entity work.key_repeater
+        port map
+        (
+            clk         => MAX10_CLK1_50,
+            key         => left_button,
+            key_out     => left_button_repeated
+        );
+
+    i_repeater2 : entity work.key_repeater
+        port map
+        (
+            clk         => MAX10_CLK1_50,
+            key         => right_button,
+            key_out     => right_button_repeated
+        );
+            
     i_steering : entity work.led_steer
         generic map
         (
@@ -42,8 +61,8 @@ begin
         port map
         (
             clk             => MAX10_CLK1_50,
-            left_button     => left_button,
-            right_button    => right_button,
+            left_button     => left_button_repeated,
+            right_button    => right_button_repeated,
             led             => LED
         );
 end architecture rtl; -- of debouncer_test 
